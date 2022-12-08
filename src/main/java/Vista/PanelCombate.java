@@ -70,8 +70,8 @@ public class PanelCombate extends JPanel implements Runnable {
 
     public void init1() {
         this.setLayout(null);
-        this.setSize(frame.getSize());
-        this.setPreferredSize(frame.getSize());
+        this.setSize(frame.getPanelPrincipal().getSize());
+        this.setPreferredSize(frame.getPanelPrincipal().getSize());
 
         panelPrepararCombate.setLayout(null);
         panelMostrarCombate.setLayout(null);

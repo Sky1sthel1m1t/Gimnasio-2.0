@@ -32,7 +32,7 @@ public class PanelTipos extends AbstractPanel<TipoDao>{
 
     @Override
     public void cargarPanelRegistro() {
-        int x = super.frame.getSize().width / 2;
+        int x = super.frame.getPanelPrincipal().getSize().width / 2;
         int y = 20;
         int altura = 30;
         int ancho = 220;

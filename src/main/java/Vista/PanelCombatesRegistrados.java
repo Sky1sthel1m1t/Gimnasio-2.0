@@ -14,6 +14,8 @@ import java.sql.SQLException;
 
 public class PanelCombatesRegistrados extends AbstractPanel<CombatesDao>{
 
+    private JLabel lbTitulo = new JLabel("Combates Registrados");
+
     private DefaultTableModel modelo = new DefaultTableModel(){
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -29,6 +31,7 @@ public class PanelCombatesRegistrados extends AbstractPanel<CombatesDao>{
     public PanelCombatesRegistrados(Frame frame, int porcentaje) {
         super(frame, porcentaje);
         cargarPanelDatos(combatesDao);
+        cargarPanelRegistro();
         agregarDobleClic();
         initHistorial();
     }
@@ -79,6 +82,14 @@ public class PanelCombatesRegistrados extends AbstractPanel<CombatesDao>{
 
     @Override
     public void cargarPanelRegistro() {
-        return;
+        int x = panelRegistro.getWidth() / 2;
+        int y = panelRegistro.getHeight() / 2;
+        int ancho = 200;
+        int altura = 50;
+
+        lbTitulo.setHorizontalAlignment(JLabel.CENTER);
+        lbTitulo.setBounds(x-(ancho / 2), y - (altura / 2),  ancho, altura);
+
+        panelRegistro.add(lbTitulo);
     }
 }

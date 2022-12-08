@@ -4,7 +4,6 @@ import DAO.AbstractDao;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
@@ -27,7 +26,7 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
     public AbstractPanel(Frame frame, int porcentaje) {
         this.frame = frame;
         this.porcentaje = porcentaje;
-        this.setPreferredSize(frame.getSize());
+        this.setPreferredSize(frame.getPanelPrincipal().getSize());
         initPaneles();
     }
 
@@ -36,17 +35,15 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
 
         this.panelDatos = new JPanel();
         this.panelRegistro = new JPanel();
-        int ancho = frame.getSize().width;
-        int altura = (frame.getSize().height * porcentaje) / 100;
+        int ancho = frame.getPanelPrincipal().getSize().width;
+        int altura = (frame.getPanelPrincipal().getSize().height * porcentaje) / 100;
         btnVolver.setBounds(0,0,100,30);
 
-        btnVolver.addActionListener(e -> {
-            frame.volver();
-        });
+        btnVolver.addActionListener(e -> frame.volver());
 
-        this.setSize(frame.getSize());
+        this.setSize(frame.getPanelPrincipal().getSize());
         panelRegistro.setBounds(0,0, ancho, altura);
-        panelDatos.setBounds(0, altura, ancho, (frame.getSize().height - altura));
+        panelDatos.setBounds(0, altura, ancho, (frame.getPanelPrincipal().getSize().height - altura));
         panelRegistro.add(btnVolver);
 
         panelRegistro.setLayout(null);

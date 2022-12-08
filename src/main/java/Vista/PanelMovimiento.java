@@ -46,14 +46,14 @@ public class PanelMovimiento extends AbstractPanel<MovimientosDao>{
 
     @Override
     public void cargarPanelRegistro() {
-        int x = super.frame.getSize().width / 2;
+        int x = super.frame.getPanelPrincipal().getSize().width / 2;
         int y = 20;
         int altura = 30;
         int ancho = 220;
         int espaciadoY = 40;
         int anchoBtn = 100;
 
-        btnUpdate.setBounds(super.frame.getSize().width - 150, 0, 150, 30);
+        btnUpdate.setBounds(super.frame.getPanelPrincipal().getSize().width - 150, 0, 150, 30);
         btnUpdate.setBackground(Color.red);
 
         lbId.setBounds(x-(ancho), y, ancho, altura);

@@ -57,8 +57,8 @@ public class PanelEnseñarMovimientos extends JPanel {
 
     public PanelEnseñarMovimientos(Frame frame) {
         this.frame = frame;
-        this.setSize(frame.getSize());
-        this.setPreferredSize(frame.getSize());
+        this.setSize(frame.getPanelPrincipal().getSize());
+        this.setPreferredSize(frame.getPanelPrincipal().getSize());
         llenarColumnas();
         llenarDatosPokemon();
         init1();

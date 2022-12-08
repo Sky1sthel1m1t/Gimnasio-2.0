@@ -1,6 +1,11 @@
 package Vista;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Frame extends JFrame {
@@ -24,19 +29,29 @@ public class Frame extends JFrame {
     private PanelCombatesRegistrados panelCombatesRegistrados;
 
     public Frame(int tamaño){
-        this.setSize(tamaño, tamaño);
-        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        init1();
+        init1(tamaño);
         this.setVisible(true);
     }
 
-    public void init1(){
-        int x = this.getWidth() / 2;
-        int y = 20;
+    public void init1(int tamaño){
+        Dimension dimension = new Dimension(tamaño,tamaño);
+
+        panelPrincipal.setLayout(null);
+        panelPrincipal.setSize(dimension);
+        panelPrincipal.setPreferredSize(panelPrincipal.getSize());
+
+        JLabel lbFondo = new JLabel();
+        lbFondo.setLocation(0,0);
+        lbFondo.setSize(dimension);
+
+        // numBotones * espacioY = mitadY
+        // 7 * 60 = 420
+        int x = panelPrincipal.getWidth() / 2;
+        int y = panelPrincipal.getHeight() / 2 - (420 / 2);
         int ancho = 200;
         int altura = 50;
-        int espacioY = 60;
+        int espacioY = altura + 10;
 
         btnTipos.setBounds(x - (ancho / 2), y, ancho, altura);
         y += espacioY;
@@ -129,15 +144,15 @@ public class Frame extends JFrame {
                 paneles.remove(1);
             }
 
-            panelCombatesRegistrados = new PanelCombatesRegistrados(this, 0);
+            panelCombatesRegistrados = new PanelCombatesRegistrados(this, 10);
             panelPrincipal.setVisible(false);
             this.add(panelCombatesRegistrados);
             this.pack();
             paneles.add(panelCombatesRegistrados);
         });
 
-        panelPrincipal.setLayout(null);
-        panelPrincipal.setSize(this.getSize());
+        cargarFondo(lbFondo);
+
         panelPrincipal.add(btnTipos);
         panelPrincipal.add(btnEntrenador);
         panelPrincipal.add(btnMovimientos);
@@ -145,13 +160,36 @@ public class Frame extends JFrame {
         panelPrincipal.add(btnRealizarCombate);
         panelPrincipal.add(btnEnseñarMovimientos);
         panelPrincipal.add(btnCombatesRegistrados);
+        panelPrincipal.add(lbFondo);
         paneles.add(panelPrincipal);
 
-        this.getContentPane().add(panelPrincipal);
+        this.add(panelPrincipal);
+        this.pack();
+        this.setLocationRelativeTo(null);
     }
 
     public void volver(){
         paneles.get(1).setVisible(false);
         panelPrincipal.setVisible(true);
     }
+
+    private void cargarFondo(JLabel lbFondo){
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File("Imagenes/fondo.png"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        Image dimg = img.getScaledInstance(lbFondo.getWidth(), lbFondo.getHeight(),
+                Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        lbFondo.setIcon(imageIcon);
+    }
+
+    public JPanel getPanelPrincipal() {
+        return panelPrincipal;
+    }
+
 }
