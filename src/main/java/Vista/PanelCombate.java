@@ -5,8 +5,10 @@ import DAO.EntrenadorDao;
 import DAO.MovimientosDao;
 import DAO.PokemonDao;
 import Modelo.*;
+import Visuales.Fuentes;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -28,8 +30,8 @@ public class PanelCombate extends JPanel implements Runnable {
     private JScrollPane scrollPane2;
     private JLabel lbCi1 = new JLabel("CI del Entrenador 1: ");
     private JLabel lbCi2 = new JLabel("CI del Entrenador 2: ");
-    private JLabel lbPokemon1 = new JLabel("Seleccionar pokemon del entrenador 1");
-    private JLabel lbPokemon2 = new JLabel("Seleccionar pokemon del entrenador 2");
+    private JLabel lbPokemon1 = new JLabel("Seleccionar pokemon del entrenador 1: ");
+    private JLabel lbPokemon2 = new JLabel("Seleccionar pokemon del entrenador 2: ");
     private JTextField txtCi1 = new JTextField();
     private JTextField txtCi2 = new JTextField();
     private JButton btnEmpezarCombate = new JButton("Empezar combate");
@@ -71,7 +73,7 @@ public class PanelCombate extends JPanel implements Runnable {
     public void init1() {
         this.setLayout(null);
         this.setSize(frame.getPanelPrincipal().getSize());
-        this.setPreferredSize(frame.getPanelPrincipal().getSize());
+        this.setPreferredSize(this.getSize());
 
         panelPrepararCombate.setLayout(null);
         panelMostrarCombate.setLayout(null);
@@ -80,22 +82,33 @@ public class PanelCombate extends JPanel implements Runnable {
         int anchoTotal = this.getWidth();
 
         panelPrepararCombate.setBounds(0, 0, anchoTotal, mitad);
+        panelPrepararCombate.setSize(new Dimension(anchoTotal, mitad));
         panelPrepararCombate.setPreferredSize(new Dimension(anchoTotal, mitad));
-        panelPrepararCombate.setBackground(Color.pink);
+        panelPrepararCombate.setBackground(AbstractPanel.getFondoPanel());
         panelMostrarCombate.setBounds(0, mitad, anchoTotal, mitad);
+        panelMostrarCombate.setSize(new Dimension(anchoTotal, mitad));
         panelMostrarCombate.setPreferredSize(new Dimension(anchoTotal, mitad));
         panelMostrarCombate.setVisible(false);
 
-        int x = this.frame.getWidth() / 2;
-        int y = 30;
+        // Falta hacer mas bonito el mostrar combate
+
+        int x = this.panelPrepararCombate.getWidth() / 2;
+        int y = 10;
         int altura = 30;
         int alturaTablas = 200;
-        int anchoTablas = 490;
+        int anchoTablas = 480;
         int espacioY = altura + 10;
         int anchoBtn = 150;
 
-        btnVolver.setBounds(0, 0, 75, 30);
+        JLabel lbTitulo = new JLabel("Organizar Combate");
+        int anchoTitulo = 400;
+        int altoTitulo = 70;
 
+        btnVolver.setBounds(0, 0, 75, 30);
+        lbTitulo.setBounds(x - (anchoTitulo/2), y, anchoTitulo, altoTitulo);
+        lbTitulo.setFont(Fuentes.getFuentes().getSolid(35));
+        lbTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        y += altoTitulo + 10;
         lbCi1.setBounds(x - (anchoTablas), y, anchoTablas, altura);
         y += espacioY;
         txtCi1.setBounds(x - (anchoTablas), y, anchoTablas, altura);
@@ -196,6 +209,9 @@ public class PanelCombate extends JPanel implements Runnable {
         panelPrepararCombate.add(scrollPane2);
         panelPrepararCombate.add(btnEmpezarCombate);
         panelPrepararCombate.add(btnVolver);
+        panelPrepararCombate.add(lbPokemon1);
+        panelPrepararCombate.add(lbPokemon2);
+        panelPrepararCombate.add(lbTitulo);
         this.add(panelMostrarCombate);
         this.add(panelPrepararCombate);
     }
@@ -269,6 +285,14 @@ public class PanelCombate extends JPanel implements Runnable {
 
         table1 = new JTable(modelo1);
         table2 = new JTable(modelo1);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        for (int i = 0; i < table1.getColumnCount(); i++) {
+            table1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            table2.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
 
         scrollPane1 = new JScrollPane(table1);
         scrollPane2 = new JScrollPane(table2);

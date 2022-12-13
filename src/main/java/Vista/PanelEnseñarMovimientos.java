@@ -6,11 +6,18 @@ import DAO.TipoDao;
 import Modelo.Movimientos;
 import Modelo.Pokemon;
 import Modelo.Tipo;
+import Visuales.Fuentes;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,10 +69,12 @@ public class PanelEnseñarMovimientos extends JPanel {
         llenarColumnas();
         llenarDatosPokemon();
         init1();
+//        cargarFondo();
     }
 
     public void init1(){
         this.setLayout(null);
+        this.setBackground(AbstractPanel.getFondoPanel());
         int mitadAncho = this.getWidth() / 2;
         int mitadAltura = this.getHeight() / 2;
         int anchoTablas = 400;
@@ -73,6 +82,15 @@ public class PanelEnseñarMovimientos extends JPanel {
         int y = 100;
 
         btnVolver.setBounds(0,0,75, 30);
+
+        JLabel lbTitulo = new JLabel("Enseñar Movimientos ");
+        int anchoTitulo = 400;
+        int altoTitulo = 70;
+
+        btnVolver.setBounds(0, 0, 75, 30);
+        lbTitulo.setBounds(mitadAncho - (anchoTitulo/2), 10, anchoTitulo, altoTitulo);
+        lbTitulo.setFont(Fuentes.getFuentes().getSolid(35));
+        lbTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
         lbPokemon.setBounds(mitadAncho - anchoTablas, y, anchoTablas, 30);
         lbMovimientos.setBounds(mitadAncho + 10, y, anchoTablas, 30);
@@ -172,6 +190,7 @@ public class PanelEnseñarMovimientos extends JPanel {
         this.add(scrollPanePokemones);
         this.add(scrollPaneSeccionados);
         this.add(btnVolver);
+        this.add(lbTitulo);
     }
 
     public void llenarColumnas(){
@@ -193,6 +212,17 @@ public class PanelEnseñarMovimientos extends JPanel {
 
         tableSeccionados = new JTable(modeloMovientosAgregados);
         scrollPaneSeccionados = new JScrollPane(tableSeccionados);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        for (int i = 0; i < tablePokemones.getColumnCount(); i++) {
+            tablePokemones.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        for (int i = 0; i < tableMovimientos.getColumnCount(); i++) {
+            tableMovimientos.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
     }
 
     public void llenarDatosPokemon(){
@@ -217,5 +247,24 @@ public class PanelEnseñarMovimientos extends JPanel {
         for (Movimientos m: movimientosDao.getMovimientosPokemon(pokemon_id)) {
             modeloMovientosAgregados.addRow(m.getDatos());
         }
+    }
+
+    private void cargarFondo() {
+        JLabel lbFondo = new JLabel();
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File("Imagenes/fondo.png"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        lbFondo.setBounds(0,0, this.getWidth(), this.getHeight());
+
+        Image dimg = img.getScaledInstance(lbFondo.getWidth(), lbFondo.getHeight(),
+                Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        lbFondo.setIcon(imageIcon);
+        this.add(lbFondo);
     }
 }

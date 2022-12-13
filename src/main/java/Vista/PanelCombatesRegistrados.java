@@ -4,6 +4,7 @@ import DAO.CombatesDao;
 import Modelo.Combate;
 import Modelo.Historial;
 import Modelo.Movimientos;
+import Visuales.Fuentes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -28,8 +29,8 @@ public class PanelCombatesRegistrados extends AbstractPanel<CombatesDao>{
     private CombatesDao combatesDao = new CombatesDao();
 
 
-    public PanelCombatesRegistrados(Frame frame, int porcentaje) {
-        super(frame, porcentaje);
+    public PanelCombatesRegistrados(Frame frame, int porcentaje, String titulo) {
+        super(frame, porcentaje, titulo);
         cargarPanelDatos(combatesDao);
         cargarPanelRegistro();
         agregarDobleClic();
@@ -82,14 +83,15 @@ public class PanelCombatesRegistrados extends AbstractPanel<CombatesDao>{
 
     @Override
     public void cargarPanelRegistro() {
-        int x = panelRegistro.getWidth() / 2;
-        int y = panelRegistro.getHeight() / 2;
-        int ancho = 200;
-        int altura = 50;
-
-        lbTitulo.setHorizontalAlignment(JLabel.CENTER);
-        lbTitulo.setBounds(x-(ancho / 2), y - (altura / 2),  ancho, altura);
-
-        panelRegistro.add(lbTitulo);
+//        int x = panelRegistro.getWidth() / 2;
+//        int y = panelRegistro.getHeight() / 2;
+//        int ancho = 400;
+//        int altura = 50;
+//
+//        lbTitulo.setHorizontalAlignment(JLabel.CENTER);
+//        lbTitulo.setBounds(x-(ancho / 2), y - (altura / 2),  ancho, altura);
+//        lbTitulo.setFont(Fuentes.getFuentes().getSolid(35));
+//
+//        panelRegistro.add(lbTitulo);
     }
 }

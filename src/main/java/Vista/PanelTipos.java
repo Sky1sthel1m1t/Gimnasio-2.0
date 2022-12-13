@@ -17,8 +17,8 @@ public class PanelTipos extends AbstractPanel<TipoDao>{
 
     private TipoDao dao = new TipoDao();
 
-    public PanelTipos(Frame frame) {
-        super(frame, 30);
+    public PanelTipos(Frame frame, String titulo) {
+        super(frame, 30, titulo);
         cargarPanelRegistro();
         cargarPanelDatos(dao);
     }
@@ -34,7 +34,7 @@ public class PanelTipos extends AbstractPanel<TipoDao>{
     @Override
     public void cargarPanelRegistro() {
         int x = super.frame.getPanelPrincipal().getSize().width / 2;
-        int y = 20;
+        int y = 80;
         int altura = 30;
         int ancho = 220;
         int espaciadoY = 40;

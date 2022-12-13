@@ -137,7 +137,7 @@ public class Frame extends JFrame {
                 paneles.remove(1);
             }
 
-            panelTipos = new PanelTipos(this);
+            panelTipos = new PanelTipos(this, "Tipos");
             panelPrincipal.setVisible(false);
             this.add(panelTipos);
             this.pack();
@@ -149,7 +149,7 @@ public class Frame extends JFrame {
                 paneles.remove(1);
             }
 
-            panelEntrenador = new PanelEntrenador(this, 30);
+            panelEntrenador = new PanelEntrenador(this, 30, "Entrenadores");
             panelPrincipal.setVisible(false);
             this.add(panelEntrenador);
             this.pack();
@@ -161,7 +161,7 @@ public class Frame extends JFrame {
                 paneles.remove(1);
             }
 
-            panelMovimientos = new PanelMovimiento(this, 30);
+            panelMovimientos = new PanelMovimiento(this, 30, "Movimientos");
             panelPrincipal.setVisible(false);
             this.add(panelMovimientos);
             this.pack();
@@ -173,7 +173,7 @@ public class Frame extends JFrame {
                 paneles.remove(1);
             }
 
-            panelPokemon = new PanelPokemon(this, 50);
+            panelPokemon = new PanelPokemon(this, 55, "Pokemones");
             panelPrincipal.setVisible(false);
             this.add(panelPokemon);
             this.pack();
@@ -209,7 +209,7 @@ public class Frame extends JFrame {
                 paneles.remove(1);
             }
 
-            panelCombatesRegistrados = new PanelCombatesRegistrados(this, 10);
+            panelCombatesRegistrados = new PanelCombatesRegistrados(this, 10, "Combates Registrados");
             panelPrincipal.setVisible(false);
             this.add(panelCombatesRegistrados);
             this.pack();

@@ -1,6 +1,7 @@
 package Vista;
 
 import DAO.AbstractDao;
+import Visuales.Fuentes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -24,17 +25,18 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
 
     private int porcentaje;
     private JButton btnVolver = new JButton("Volver");
-    private Color fondoPanel = new Color(0xE53838);
+    private static Color fondoPanel = new Color(0xEA7070);
 
-    public AbstractPanel(Frame frame, int porcentaje) {
+    public AbstractPanel(Frame frame, int porcentaje, String titulo) {
         this.frame = frame;
         this.porcentaje = porcentaje;
         this.setPreferredSize(frame.getPanelPrincipal().getSize());
-        initPaneles();
+        initPaneles(titulo);
     }
 
-    private void initPaneles(){
+    private void initPaneles(String titulo){
         this.setLayout(null);
+        JLabel lbTitulo = new JLabel(titulo);
 
         this.panelDatos = new JPanel();
         this.panelRegistro = new JPanel();
@@ -49,9 +51,17 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
         panelDatos.setBounds(0, altura, ancho, (frame.getPanelPrincipal().getSize().height - altura));
         panelRegistro.add(btnVolver);
 
+        int anchoTitulo = 500;
+        int altoTitulo = 50;
+
+        lbTitulo.setBounds((panelRegistro.getWidth() / 2) - (anchoTitulo / 2), 10, anchoTitulo, altoTitulo);
+        lbTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        lbTitulo.setFont(Fuentes.getFuentes().getSolid(35));
+
         panelRegistro.setLayout(null);
         panelDatos.setLayout(null);
         panelRegistro.setBackground(fondoPanel);
+        panelRegistro.add(lbTitulo);
 
         this.add(panelDatos);
         this.add(panelRegistro);
@@ -68,9 +78,12 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
 
         jTable = new JTable(defaultTableModel);
 
-//        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-//        centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-//        jTable.setDefaultRenderer(String.class, centerRenderer);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        for (int i = 0; i < jTable.getColumnCount(); i++) {
+            jTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
 
         scrollPane = new JScrollPane(jTable);
 
@@ -82,4 +95,8 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
     public abstract void leerDatos(DefaultTableModel modelo);
 
     public abstract void cargarPanelRegistro();
+
+    public static Color getFondoPanel() {
+        return fondoPanel;
+    }
 }

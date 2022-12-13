@@ -37,8 +37,8 @@ public class PanelPokemon extends AbstractPanel<PokemonDao> {
     private ArrayList<Tipo> tiposSeleccionados = new ArrayList<>();
     private boolean modoUpdate = false;
 
-    public PanelPokemon(Frame frame, int porcentaje) {
-        super(frame, porcentaje);
+    public PanelPokemon(Frame frame, int porcentaje, String titulo) {
+        super(frame, porcentaje, titulo);
         llenarTipos();
         cargarPanelRegistro();
         cargarPanelDatos(dao);
@@ -56,7 +56,7 @@ public class PanelPokemon extends AbstractPanel<PokemonDao> {
     @Override
     public void cargarPanelRegistro() {
         int x = super.frame.getPanelPrincipal().getSize().width / 2;
-        int y = 20;
+        int y = 60;
         int altura = 30;
         int ancho = 220;
         int espaciadoY = 40;
@@ -85,6 +85,7 @@ public class PanelPokemon extends AbstractPanel<PokemonDao> {
         lbDisponibilidad.setBounds(x - ancho, y, ancho, altura);
         lbDisponibilidad.setHorizontalAlignment(JLabel.RIGHT);
         checkBox.setBounds(x, y, ancho, altura);
+        checkBox.setBackground(null);
         y += espaciadoY;
         lbTipos.setBounds(x - ancho, y, ancho, altura);
         lbTipos.setHorizontalAlignment(JLabel.RIGHT);
