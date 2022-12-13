@@ -18,12 +18,12 @@ public class TipoDao extends AbstractDao<Tipo> {
             Statement st = con.getConexion().createStatement();
             ResultSet rs = con.consulta(st, comando);
 
-            while (rs.next()){
+            while (rs.next()) {
                 Tipo tipo = new Tipo(rs.getInt("id"), rs.getString("Nombre"));
                 datos.add(tipo);
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -33,16 +33,12 @@ public class TipoDao extends AbstractDao<Tipo> {
     }
 
     @Override
-    public void insert(Tipo valor) {
+    public void insert(Tipo valor) throws SQLException {
         String comando = "call insacttipo(" + valor.id() + "," + "'" + valor.nombre() + "')";
 
-        try {
-            con.conectar();
-            Statement st = con.getConexion().createStatement();
-            con.ejecutar(st, comando);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        con.conectar();
+        Statement st = con.getConexion().createStatement();
+        con.ejecutar(st, comando);
 
         con.desconectar();
     }
@@ -61,7 +57,7 @@ public class TipoDao extends AbstractDao<Tipo> {
             Statement statement = con.getConexion().createStatement();
             ResultSet rs = con.consulta(statement, comando);
 
-            while (rs.next()){
+            while (rs.next()) {
                 String aux = rs.getString("column_name");
                 columnas.add(aux);
             }
@@ -75,7 +71,7 @@ public class TipoDao extends AbstractDao<Tipo> {
         return columnas;
     }
 
-    public String getNombre(int id){
+    public String getNombre(int id) {
         String comando = "select * from tipo t where id = " + id;
         String nombre = "";
 
@@ -84,12 +80,12 @@ public class TipoDao extends AbstractDao<Tipo> {
             Statement st = con.getConexion().createStatement();
             ResultSet rs = con.consulta(st, comando);
 
-            while (rs.next()){
+            while (rs.next()) {
                 Tipo tipo = new Tipo(rs.getInt("id"), rs.getString("Nombre"));
                 nombre = tipo.nombre();
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 

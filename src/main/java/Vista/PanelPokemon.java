@@ -91,7 +91,7 @@ public class PanelPokemon extends AbstractPanel<PokemonDao> {
         lista.setBounds(x, y, ancho, alturaLista);
         y += espaciadoY + alturaLista;
         btnRegistrar.setBounds(x - (anchoBtn), y, anchoBtn * 2, altura);
-        btnCurarPokemones.setBounds(x - (anchoBtn * 3) + 10, y, anchoBtn * 2, altura);
+        btnCurarPokemones.setBounds(x - (anchoBtn * 3) - 10, y, anchoBtn * 2, altura);
         btnCurarPokemonesDebilitados.setBounds(x + (anchoBtn) + 10, y, anchoBtn * 2 , altura);
 
         btnRegistrar.addActionListener(e -> {

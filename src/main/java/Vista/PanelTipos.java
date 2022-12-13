@@ -2,10 +2,11 @@ package Vista;
 
 import DAO.TipoDao;
 import Modelo.Tipo;
-import PlaceHolder.TextPrompt;
+import Visuales.TextPrompt;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
 
 public class PanelTipos extends AbstractPanel<TipoDao>{
     private JLabel lbId = new JLabel("ID: ");
@@ -49,6 +50,36 @@ public class PanelTipos extends AbstractPanel<TipoDao>{
         txtNombre.setBounds(x, y, ancho,altura);
         y += espaciadoY;
         btnRegistrar.setBounds(x - (anchoBtn), y, anchoBtn*2, altura);
+
+        btnRegistrar.addActionListener(e -> {
+            String aux = txtId.getText().trim();
+            String nombre  = txtNombre.getText().trim();
+
+            if (nombre.isBlank()){
+                JOptionPane.showMessageDialog(null,"El nombre no puede estar vacio");
+                return;
+            }
+
+            Tipo tipo;
+
+            if (aux.isBlank()){
+                tipo = new Tipo(null, nombre);
+            } else {
+                try {
+                    int id = Integer.parseInt(aux);
+                    tipo = new Tipo(id,nombre);
+                } catch (Exception ex){
+                    JOptionPane.showMessageDialog(null,"El id solo puede ser un numero entero");
+                    return;
+                }
+            }
+
+            try {
+                dao.insert(tipo);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido el siguiente error: " + ex.getMessage());
+            }
+        });
 
         super.panelRegistro.add(lbId);
         super.panelRegistro.add(lbNombre);

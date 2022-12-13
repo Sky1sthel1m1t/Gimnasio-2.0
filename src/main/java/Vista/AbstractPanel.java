@@ -3,7 +3,9 @@ package Vista;
 import DAO.AbstractDao;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
@@ -22,6 +24,7 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
 
     private int porcentaje;
     private JButton btnVolver = new JButton("Volver");
+    private Color fondoPanel = new Color(0xE53838);
 
     public AbstractPanel(Frame frame, int porcentaje) {
         this.frame = frame;
@@ -48,6 +51,7 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
 
         panelRegistro.setLayout(null);
         panelDatos.setLayout(null);
+        panelRegistro.setBackground(fondoPanel);
 
         this.add(panelDatos);
         this.add(panelRegistro);
@@ -63,6 +67,11 @@ public abstract class AbstractPanel<E extends AbstractDao> extends JPanel {
         leerDatos(defaultTableModel);
 
         jTable = new JTable(defaultTableModel);
+
+//        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+//        centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+//        jTable.setDefaultRenderer(String.class, centerRenderer);
+
         scrollPane = new JScrollPane(jTable);
 
         scrollPane.setBounds(0,0,panelDatos.getWidth(), panelDatos.getHeight());
