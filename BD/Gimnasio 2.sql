@@ -435,7 +435,8 @@ as
 $$
 begin 
 	update pokemon 
-	set saludactual = saludmaxima 
+	set saludactual = saludmaxima,
+	disponibilidad = true
 	where saludactual = 0;
 end 
 $$
@@ -446,7 +447,8 @@ as
 $$
 begin 
 	update pokemon 
-	set saludactual = saludmaxima 
+	set saludactual = saludmaxima,
+	disponibilidad = true
 	where saludactual <> saludmaxima;
 end 
 $$
@@ -812,7 +814,11 @@ execute procedure validarDisponibilidad();
 
 drop trigger validarDisponibilidad on pokemon;
 
-select * from pokemon p 
+update pokemon 
+set disponibilidad = true;
+
+select * from acciones a; 
+select * from combates c; 
 
 ---------
 --Datos--
@@ -878,6 +884,11 @@ select * from pokemonsabe p where p.pokemon_id = 10 and movimiento_id = 6
 
 select nombre from movimientos m order by 1;
 
+--Reiniciar Tablas
+
+truncate table acciones restart identity cascade;
+truncate table historial restart identity;
+truncate table combates restart identity cascade;
 
 
 
