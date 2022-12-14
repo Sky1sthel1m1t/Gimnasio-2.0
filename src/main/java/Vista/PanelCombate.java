@@ -6,10 +6,14 @@ import DAO.MovimientosDao;
 import DAO.PokemonDao;
 import Modelo.*;
 import Visuales.Fuentes;
+import Visuales.ImageLoader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -43,7 +47,7 @@ public class PanelCombate extends JPanel implements Runnable {
     private JLabel lbNombrePokemon2 = new JLabel();
     private JLabel lbVidaPokemon1 = new JLabel();
     private JLabel lbVidaPokemon2 = new JLabel();
-    private JTextArea textField = new JTextArea();
+    private JTextPane textPane = new JTextPane();
 
     private JPanel panelPrepararCombate = new JPanel();
     private JPanel panelMostrarCombate = new JPanel();
@@ -240,19 +244,28 @@ public class PanelCombate extends JPanel implements Runnable {
         int alto = 30;
         int y = 0;
         int espacio = alto + 10;
+        JLabel lbVersus = new JLabel();
+        Font fuente = Fuentes.getFuentes().getSolid(20);
+
         lbNombre1.setBounds(0, y, ancho, alto);
+        lbNombre1.setFont(fuente);
         lbNombre2.setBounds( anchoTotal - ancho, y,ancho,alto);
+        lbNombre2.setFont(fuente);
         lbNombre2.setHorizontalAlignment(SwingConstants.RIGHT);
         y += espacio;
         lbNombrePokemon1.setBounds(0,y, ancho, alto);
+        lbNombrePokemon1.setFont(fuente);
         lbNombrePokemon2.setBounds(anchoTotal - ancho, y, ancho, alto);
         lbNombrePokemon2.setHorizontalAlignment(SwingConstants.RIGHT);
+        lbNombrePokemon2.setFont(fuente);
         y += espacio;
         lbVidaPokemon1.setBounds(0,y,ancho,alto);
+        lbVidaPokemon1.setFont(fuente);
         lbVidaPokemon2.setBounds(anchoTotal - ancho, y,ancho,alto);
+        lbVidaPokemon2.setFont(fuente);
         lbVidaPokemon2.setHorizontalAlignment(SwingConstants.RIGHT);
         y += espacio;
-        textField.setBounds(0,y,anchoTotal, alturaTotal - y);
+        textPane.setBounds(0,y,anchoTotal, alturaTotal - y);
 
         lbNombre1.setText(entrenador1.nombre() + " " + entrenador1.apellido());
         lbNombre2.setText(entrenador2.nombre() + " " + entrenador2.apellido());
@@ -261,9 +274,11 @@ public class PanelCombate extends JPanel implements Runnable {
         lbVidaPokemon1.setText("PS: " + pokemon1.saludActual() + "/" + pokemon1.saludMaxima());
         lbVidaPokemon2.setText("PS: " + pokemon2.saludActual() + "/" + pokemon2.saludMaxima());
 
-        textField.setWrapStyleWord(true);
-        textField.setLineWrap(true);
-        textField.setEditable(false);
+        textPane.setEditable(false);
+
+        lbVersus.setBounds((anchoTotal / 2) - (ancho/2), 0, 150, textPane.getY());
+        String path = "Imagenes/versus.png";
+        lbVersus.setIcon(ImageLoader.getImagen(path, lbVersus.getWidth(), lbVersus.getHeight()));
 
         panelMostrarCombate.add(lbNombre1);
         panelMostrarCombate.add(lbVidaPokemon1);
@@ -271,7 +286,8 @@ public class PanelCombate extends JPanel implements Runnable {
         panelMostrarCombate.add(lbNombre2);
         panelMostrarCombate.add(lbVidaPokemon2);
         panelMostrarCombate.add(lbNombrePokemon2);
-        panelMostrarCombate.add(textField);
+        panelMostrarCombate.add(textPane);
+        panelMostrarCombate.add(lbVersus);
         panelMostrarCombate.setVisible(true);
     }
 
@@ -307,12 +323,61 @@ public class PanelCombate extends JPanel implements Runnable {
         }
     }
 
+    private void nuevaLinea(){
+        try {
+            textPane.getStyledDocument().insertString(
+                    textPane.getStyledDocument().getLength(),
+                    System.getProperty("line.separator"), null);
+        } catch (BadLocationException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    private void textoNegrita(SimpleAttributeSet attrs, String texto, int tamaño){
+        StyleConstants.setBold(attrs, true);
+        StyleConstants.setFontSize(attrs, tamaño);
+        try {
+            textPane.getStyledDocument().insertString(
+                    textPane.getStyledDocument().getLength(), texto, attrs);
+        } catch (BadLocationException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    private void textoNormal(SimpleAttributeSet attrs, String texto, int tamaño){
+        StyleConstants.setBold(attrs, false);
+        StyleConstants.setFontSize(attrs, tamaño);
+        try {
+            textPane.getStyledDocument().insertString(
+                    textPane.getStyledDocument().getLength(), texto, attrs);
+        } catch (BadLocationException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    private void textoGanador(SimpleAttributeSet attrs, String texto, int tamaño){
+        StyleConstants.setBold(attrs, true);
+        StyleConstants.setFontSize(attrs, tamaño);
+        StyleConstants.setAlignment(attrs, SwingConstants.CENTER);
+        try {
+            textPane.getStyledDocument().insertString(
+                    textPane.getStyledDocument().getLength(), texto, attrs);
+        } catch (BadLocationException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
     @Override
     public void run() {
         Enfrentamiento enfrentamiento = new Enfrentamiento(
                 pokemon1.id(), pokemon2.id(), entrenador1.ci(), entrenador2.ci(), combateId);
         enfrentamientoDao.iniciarEnfrentamiento(enfrentamiento);
-        textField.append(equipo1.e().nombre() + " y " + equipo1.p().nombre() + " entran a la arena combate" + "\n");
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        int tamañoTextoNormal = 15;
+        int tamañoTextoGanador = 18;
+
+        textoNegrita(attrs, equipo1.e().nombre() + " y " + equipo1.p().nombre() + " entran a la arena combate", tamañoTextoNormal);
+        nuevaLinea();
 
         try {
             Thread.sleep(1000);
@@ -320,7 +385,8 @@ public class PanelCombate extends JPanel implements Runnable {
             throw new RuntimeException(e);
         }
 
-        textField.append(equipo2.e().nombre() + " y " + equipo2.p().nombre() + " entran a la arena combate" + "\n");
+        textoNegrita(attrs, equipo2.e().nombre() + " y " + equipo2.p().nombre() + " entran a la arena combate", tamañoTextoNormal);
+        nuevaLinea();
 
         boolean esDerrotado1 = true;
         boolean esDerrotado2 = true;
@@ -334,24 +400,29 @@ public class PanelCombate extends JPanel implements Runnable {
         while (esDerrotado1 && esDerrotado2){
             numTurno++;
             String aux;
+            String nombreNegrita;
 
             if (numTurno % 2 == 1){
                 enfrentamiento = new Enfrentamiento
                         (equipo1.p().id(), equipo2.p().id(), equipo1.e().ci(), equipo2.e().ci(), combateId);
                 Movimientos movimiento = getAtaque(equipo1.movimientos());
                 enfrentamientoDao.realizarMovimiento(enfrentamiento, movimiento, numTurno, combateId);
-                aux = equipo1.e().nombre() + ": " + equipo1.p().nombre() + " usa " + movimiento.nombre() + "\n";
+                nombreNegrita = equipo1.e().nombre() + ": ";
+                aux = equipo1.p().nombre() + " usa " + movimiento.nombre();
             } else {
                 enfrentamiento = new Enfrentamiento
                         (equipo2.p().id(), equipo1.p().id(), equipo2.e().ci(), equipo1.e().ci(), combateId);
                 Movimientos movimiento = getAtaque(equipo2.movimientos());
                 enfrentamientoDao.realizarMovimiento(enfrentamiento, movimiento, numTurno, combateId);
-                aux = equipo2.e().nombre() + ": " + equipo2.p().nombre() + " usa " + movimiento.nombre() + "\n";
+                nombreNegrita = equipo2.e().nombre() + ": ";
+                aux = equipo2.p().nombre() + " usa " + movimiento.nombre();
             }
 
             lbVidaPokemon1.setText("PS: " + pokemonDao.getvidaActual(pokemon1.id()) + "/" + pokemon1.saludMaxima());
             lbVidaPokemon2.setText("PS: " + pokemonDao.getvidaActual(pokemon2.id()) + "/" + pokemon2.saludMaxima());
-            textField.append(aux);
+            textoNegrita(attrs, nombreNegrita, tamañoTextoNormal);
+            textoNormal(attrs, aux, tamañoTextoNormal);
+            nuevaLinea();
 
             esDerrotado1 = !pokemonDao.esDerrotado(equipo1.p().id());
             esDerrotado2 = !pokemonDao.esDerrotado(equipo2.p().id());
@@ -364,13 +435,15 @@ public class PanelCombate extends JPanel implements Runnable {
         }
 
         if (pokemonDao.esDerrotado(equipo1.p().id())){
-            textField.append(equipo1.p().nombre() + " no puede continuar" + "\n");
-            textField.append(equipo2.e().nombre() + " y " + equipo2.p().nombre() + " ganan el combate");
+            textoNegrita(attrs, equipo1.p().nombre() + " no puede continuar", tamañoTextoNormal);
+            nuevaLinea();
+            textoGanador(attrs, equipo2.e().nombre() + " y " + equipo2.p().nombre() + " ganan el combate", tamañoTextoGanador);
         }
 
         if (pokemonDao.esDerrotado(equipo2.p().id())){
-            textField.append(equipo2.p().nombre() + " no puede continuar" + "\n");
-            textField.append(equipo1.e().nombre() + " y " + equipo1.p().nombre() + " ganan el combate");
+            textoNegrita(attrs, equipo2.p().nombre() + " no puede continuar", tamañoTextoNormal);
+            nuevaLinea();
+            textoGanador(attrs, equipo1.e().nombre() + " y " + equipo1.p().nombre() + " ganan el combate",tamañoTextoGanador);
         }
 
         llenarDatos();

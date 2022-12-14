@@ -155,6 +155,11 @@ begin
 	if (p_id is null) then 
 		insert into tipo values (default, p_nombre);
 	else
+		
+		if not exists (select * from tipo t where id = p_id) then
+			raise exception 'El id no existe en la base de datos';
+		end if;
+		
 		update tipo 
 		set nombre = p_nombre 
 		where id = p_id;
@@ -447,28 +452,6 @@ end
 $$
 language plpgsql;
 
-create or replace function conoceMovimientos(
-	p_pokemon_id int,
-	p_movimiento_id int
-) returns text 
-as 
-$$
-declare 
-	num int;
-	resultado text;
-begin
-	
-	select * into num from pokemonsabe p where pokemon_id = p_pokemon_id and movimiento_id = p_movimiento_id;
-	
-	if num = 1 then
-		return 'X';
-	end if;
-	
-	return '';
-end 
-$$
-language plpgsql;
-
 -------------
 --Funciones--
 -------------
@@ -628,6 +611,28 @@ declare
 begin
 	select count(*) into num from pokemonsabe p where pokemon_id = p_pokemon_id;
 	return num;
+end 
+$$
+language plpgsql;
+
+create or replace function conoceMovimientos(
+	p_pokemon_id int,
+	p_movimiento_id int
+) returns text 
+as 
+$$
+declare 
+	num int;
+	resultado text;
+begin
+	
+	select count(*) into num from pokemonsabe p where pokemon_id = p_pokemon_id and movimiento_id = p_movimiento_id;
+	
+	if num = 1 then
+		return 'X';
+	end if;
+	
+	return '';
 end 
 $$
 language plpgsql;
@@ -847,11 +852,31 @@ select * from movimientos m
 
 CREATE EXTENSION tablefunc;
 
-select * from crosstab('select p.nombre , ps.movimiento_id, conoceMovimientos(ps.pokemon_id , ps.movimiento_id) 
-from pokemonsabe ps join pokemon p on ps.pokemon_id = p.id order by 1, 2', 'select id from movimientos m order by 1')
-as (Pokemon text, "Impactrueno" text, "Llamarada" text, "Chispa" text, "Ascuas" text, "Ataque Ala" text, "Lanzarrocas" text);
+select * from crosstab(
+'
+	select p2.nombre, m.nombre, conoceMovimientos(p2.id, m.id) from pokemonsabe p 
+	right join pokemon p2 on p2.id = p.pokemon_id 
+	join movimientos m on m.id = p.movimiento_id 
+	order by 1,2;
+'
+,
+'
+	select nombre from movimientos m order by 1;
+') as (Pokemon TEXT, Ascuas TEXT, Ataque_Ala TEXT, Chispa TEXT, Impactrueno TEXT, Lanzarrocas TEXT, Llamarada TEXT);
 
+select p2.nombre, m.nombre, conoceMovimientos(p2.id, m.id) from pokemonsabe p 
+right join pokemon p2 on p2.id = p.pokemon_id 
+join movimientos m on m.id = p.movimiento_id 
+order by 1,2;
 
+select p2.nombre, m.nombre from pokemonsabe p 
+right join pokemon p2 on p2.id = p.pokemon_id 
+join movimientos m on m.id = p.movimiento_id 
+order by 1,2;
+
+select * from pokemonsabe p where p.pokemon_id = 10 and movimiento_id = 6
+
+select nombre from movimientos m order by 1;
 
 
 

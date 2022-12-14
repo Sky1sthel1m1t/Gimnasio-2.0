@@ -46,7 +46,9 @@ public class PanelPokemon extends AbstractPanel<PokemonDao> {
 
     @Override
     public void leerDatos(DefaultTableModel modelo) {
-        modelo.addColumn("tipo");
+        if (modelo.getColumnCount() < 6){
+            modelo.addColumn("tipo");
+        }
         modelo.setRowCount(0);
         for (Pokemon p : dao.getAll()) {
             modelo.addRow(p.getDatos());
@@ -60,7 +62,7 @@ public class PanelPokemon extends AbstractPanel<PokemonDao> {
         int altura = 30;
         int ancho = 220;
         int espaciadoY = 40;
-        int anchoBtn = 100;
+        int anchoBtn = 135;
         int alturaLista = 200;
 
         btnUpdate.setBounds(super.panelRegistro.getWidth() - 150, 0, 150, 30);

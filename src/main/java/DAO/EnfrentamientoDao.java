@@ -30,7 +30,7 @@ public class EnfrentamientoDao {
 
         con.desconectar();
 
-        return num + 1;
+        return num+1;
     }
 
     public void iniciarEnfrentamiento(Enfrentamiento enfrentamiento){
